@@ -11,47 +11,55 @@ class HomeScreen extends StatelessWidget {
 
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (ctx) {
         return Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                "Add New Task",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                controller: controller,
-                decoration: const InputDecoration(
-                  hintText: "Enter task title",
-                  border: OutlineInputBorder(),
+          padding: EdgeInsets.only(
+            left: 16,
+            right: 16,
+            top: 16,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 16, // ✅ pushes up with keyboard
+          ),
+          child: SingleChildScrollView( // ✅ makes it scrollable
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  "Add New Task",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                autofocus: true,
-                onSubmitted: (_) {
-                  if (controller.text.isNotEmpty) {
-                    Provider.of<TaskProvider>(context, listen: false)
-                        .addTask(controller.text);
-                    Navigator.pop(context);
-                  }
-                },
-              ),
-              const SizedBox(height: 10),
-              ElevatedButton(
-                onPressed: () {
-                  if (controller.text.isNotEmpty) {
-                    Provider.of<TaskProvider>(context, listen: false)
-                        .addTask(controller.text);
-                    Navigator.pop(context);
-                  }
-                },
-                child: const Text("Add Task"),
-              ),
-            ],
+                const SizedBox(height: 10),
+                TextField(
+                  controller: controller,
+                  decoration: const InputDecoration(
+                    hintText: "Enter task title",
+                    border: OutlineInputBorder(),
+                  ),
+                  autofocus: true,
+                  onSubmitted: (_) {
+                    if (controller.text.isNotEmpty) {
+                      Provider.of<TaskProvider>(context, listen: false)
+                          .addTask(controller.text);
+                      Navigator.pop(context);
+                    }
+                  },
+                ),
+                const SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    if (controller.text.isNotEmpty) {
+                      Provider.of<TaskProvider>(context, listen: false)
+                          .addTask(controller.text);
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: const Text("Add Task"),
+                ),
+              ],
+            ),
           ),
         );
       },
