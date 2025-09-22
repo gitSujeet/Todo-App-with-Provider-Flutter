@@ -11,20 +11,30 @@ class TaskItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final taskProvider = Provider.of<TaskProvider>(context, listen: false);
 
-    return ListTile(
-      title: Text(
-        task.title,
-        style: TextStyle(
-          decoration: task.isDone ? TextDecoration.lineThrough : null,
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 3,
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        leading: Checkbox(
+          value: task.isDone,
+          shape: const CircleBorder(),
+          onChanged: (_) => taskProvider.toggleTask(task.id),
         ),
-      ),
-      leading: Checkbox(
-        value: task.isDone,
-        onChanged: (_) => taskProvider.toggleTask(task.id),
-      ),
-      trailing: IconButton(
-        icon: const Icon(Icons.delete, color: Colors.red),
-        onPressed: () => taskProvider.removeTask(task.id),
+        title: Text(
+          task.title,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            decoration: task.isDone ? TextDecoration.lineThrough : null,
+            color: task.isDone ? Colors.grey : Colors.black,
+          ),
+        ),
+        trailing: IconButton(
+          icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
+          onPressed: () => taskProvider.removeTask(task.id),
+        ),
       ),
     );
   }
