@@ -68,27 +68,31 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final taskProvider = Provider.of<TaskProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text("📝 My Tasks"),
         centerTitle: true,
       ),
-      body: taskProvider.tasks.isEmpty
-          ? const Center(
-        child: Text(
-          "No tasks yet!\nTap + to add one.",
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 18, color: Colors.grey),
-        ),
-      )
-          : ListView.builder(
-        padding: const EdgeInsets.all(12),
-        itemCount: taskProvider.tasks.length,
-        itemBuilder: (ctx, i) =>
-            TaskItem(task: taskProvider.tasks[i]),
+      body: Consumer<TaskProvider>(
+        builder: (ctx, taskProvider, _) {
+          if (taskProvider.tasks.isEmpty) {
+            return const Center(
+              child: Text(
+                "No tasks yet!\nTap + to add one.",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 18, color: Colors.grey),
+              ),
+            );
+          }
+          return ListView.builder(
+            padding: const EdgeInsets.all(12),
+            itemCount: taskProvider.tasks.length,
+            itemBuilder: (ctx, i) => TaskItem(task: taskProvider.tasks[i]),
+          );
+        },
       ),
+
       floatingActionButton: FloatingActionButton(
         onPressed: () => _openAddTaskSheet(context),
         child: const Icon(Icons.add),
